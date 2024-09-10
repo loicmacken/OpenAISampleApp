@@ -1,0 +1,23 @@
+{
+  "name": "openai-sample-app",
+  "version": "1.0.0",
+  "description": "Classify banking transactions into 10 predefined categories.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loicmacken/OpenAISampleApp.git"
+  },
+  "keywords": [
+    "OpenAI",
+    "classification",
+    "Node"
+  ],
+  "author": "loicmacken",
+  "bugs": {
+    "url": "https://github.com/loicmacken/OpenAISampleApp/issues"
+  },
+  "homepage": "https://github.com/loicmacken/OpenAISampleApp#readme"
+}
