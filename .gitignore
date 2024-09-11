@@ -134,3 +134,6 @@ dist
 
 # postgres data directory
 pgdata
+
+# csv files for bulk import/export
+data
