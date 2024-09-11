@@ -1,17 +1,29 @@
 services:
   db:
     image: postgres
+    restart: unless-stopped
+    env_file: .env
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: transactions
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "$DB_PORT:$DB_PORT"
   web:
-    image: openai-sample-app
+    build: .
+    restart: unless-stopped
+    env_file: .env
     depends_on:
       - db
     ports:
-      - "8080:8080"
+      - "$NODE_DOCKER_PORT:$NODE_DOCKER_PORT"
+    environment:
+      - DB_HOST=db
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_NAME
+      - DB_PORT=$DB_PORT
+    stdin_open: true
+    tty: true
