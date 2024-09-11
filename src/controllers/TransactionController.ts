@@ -11,3 +11,7 @@ export const getTransactionById = (req: Request, res: Response) => {
 export const createTransaction = (req: Request, res: Response) => {
   // TODO: Implement createTransaction
 }
+
+export const bulkCreateTransactions = (req: Request, res: Response) => {
+  // TODO: Implement bulkCreateTransactions
+}
