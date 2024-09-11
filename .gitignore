@@ -131,3 +131,6 @@ dist
 
 # vscode IDE files
 .vscode
+
+# postgres data directory
+pgdata
