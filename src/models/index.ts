@@ -2,7 +2,9 @@ import dbConfig from '../config/db.config';
 
 import { Sequelize } from 'sequelize';
 
-export default new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+import Transaction from './transaction';
+
+const Database = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   port: dbConfig.port,
@@ -15,3 +17,9 @@ export default new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     idle: dbConfig.pool.idle
   }
 });
+
+Database.define('transaction', Transaction);
+
+(async () => {
+  await Database.sync();
+})();
