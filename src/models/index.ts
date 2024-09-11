@@ -1,7 +1,8 @@
 import dbConfig from '../config/db.config';
 
 import { Sequelize } from 'sequelize';
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+
+export default new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   port: dbConfig.port,
