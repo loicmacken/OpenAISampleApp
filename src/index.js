@@ -1,6 +1,6 @@
-import express from 'express';
+import { application } from 'express';
 
-app.get('/', (req, res) => {
+application.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
