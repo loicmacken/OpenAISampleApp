@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 
 import TransactionCategory from './TransactionCategory';
 
-export default {
+export const Transaction = {
   id: {
     type: DataTypes.STRING(8),
     primaryKey: true,

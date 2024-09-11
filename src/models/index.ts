@@ -2,7 +2,7 @@ import dbConfig from '../config/db.config';
 
 import { Sequelize } from 'sequelize';
 
-import Transaction from './transaction';
+import { Transaction } from './Transaction';
 
 const Database = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
