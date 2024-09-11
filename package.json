@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/loicmacken/OpenAISampleApp#readme",
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "dotenv": "^16.4.5",
     "express": "^5.0.0",
     "node-mocks-http": "^1.16.0",
