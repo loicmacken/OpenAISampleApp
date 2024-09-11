@@ -1,10 +1,10 @@
 export default {
-  HOST: process.env.DB_HOST,
-  USER: process.env.DB_USER,
-  PASSWORD: process.env.DB_PASSWORD,
-  DB: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  dialect: 'postgres',
+  HOST: process.env.DB_HOST as string,
+  USER: process.env.DB_USER as string,
+  PASSWORD: process.env.DB_PASSWORD as string,
+  DB: process.env.DB_NAME as string,
+  port: process.env.DB_PORT as unknown as number,
+  dialect: "postgres" as any,
   pool: {
     max: 5,
     min: 0,
