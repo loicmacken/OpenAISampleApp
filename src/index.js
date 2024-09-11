@@ -1,9 +1,11 @@
-import { application } from 'express';
+import express from 'express';
+const app = express();
+const port = process.env.PORT || 8080;
 
-application.get('/', (req, res) => {
+
+app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-const port = process.env.PORT || 8080;
 
-application.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
