@@ -9,7 +9,11 @@
     "start": "cross-env NODE_ENV=production node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
     "db:create": "sequelize-cli db:create",
     "db:migrate": "sequelize-cli db:migrate",
-    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate"
+    "db:g:migration": "sequelize-cli migration:generate --name",
+    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
+    "db:seed": "sequelize-cli db:seed:all",
+    "db:g:seed": "sequelize-cli seed:generate --name",
+    "db:reseed": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all"
   },
   "type": "module",
   "repository": {
