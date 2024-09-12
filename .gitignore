@@ -137,3 +137,6 @@ pgdata
 
 # csv files for bulk import/export
 data
+
+# docker-compose development file
+docker-compose.dev.yml
