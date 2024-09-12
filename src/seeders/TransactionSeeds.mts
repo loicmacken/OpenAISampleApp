@@ -3,7 +3,7 @@ import TransactionCategory from '../models/TransactionCategory';
 
 export default {
   up: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
-    return await queryInterface.bulkInsert('transactions', [
+    await queryInterface.bulkInsert('transactions', [
       {
         id: 'TRN00001',
         amount: 100.00,
@@ -34,7 +34,7 @@ export default {
     ]);
   },
   down: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
-    return await queryInterface.bulkDelete('transactions', null as any, {});
+    await queryInterface.bulkDelete('transactions', null as any, {});
   }
 };
 
