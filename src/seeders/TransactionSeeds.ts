@@ -1,49 +1,18 @@
 import pool from "../models/index";
 
-const samepleTransactions = [
-  {
-    id: 'TRN00001',
-    amount: 100.00,
-    timestamp: new Date().toISOString().slice(0, 19).replace('T', ' '),
-    description: 'Test transaction 1',
-    transactionType: 'credit',
-    accountNumber: 'ACCOUN0123456789',
-    transactionCategory: null
-  },
-  {
-    id: 'TRN00002',
-    amount: -200.00,
-    timestamp: new Date().toISOString().slice(0, 19).replace('T', ' '),
-    description: 'Test transaction 2',
-    transactionType: 'credit',
-    accountNumber: 'ACCOUN0123456789',
-    transactionCategory: null
-  },
-  {
-    id: 'TRN00003',
-    amount: 300.00,
-    timestamp: new Date().toISOString().slice(0, 19).replace('T', ' '),
-    description: 'Test transaction 3',
-    transactionType: 'credit',
-    accountNumber: 'ACCOUN0123456789',
-    transactionCategory: "Groceries"
-  }
-];
+import sampleTransactions from "./sampleTransactions";
 
 export default {
   up: async () => {
     try {
       await pool.query(
         `
-        CREATE TABLE transactions (
-          id VARCHAR(8) PRIMARY KEY NOT NULL UNIQUE CHECK (id ~ '^[a-zA-Z]{3}[0-9]{5}$'),
-          amount DECIMAL(10, 2) NOT NULL,
-          timestamp TIMESTAMP NOT NULL,
-          description VARCHAR(255),
-          transactionType VARCHAR(64) NOT NULL,
-          accountNumber VARCHAR(16) NOT NULL CHECK (accountNumber ~ '^[a-zA-Z]{6}[0-9]{10}$'),
-          transactionCategory VARCHAR(64) CHECK (transactionCategory IN ('Groceries', 'Dining Out', 'Utilities', 'Transportation', 'Entertainment', 'Healthcare', 'Shopping', 'Housing', 'Education', 'Miscellaneous'))
-        );
+        INSERT INTO transactions (id, amount, timestamp, description, transactionType, accountNumber, transactionCategory)
+        VALUES 
+        ('${sampleTransactions[0].id}', ${sampleTransactions[0].amount}, '${sampleTransactions[0].timestamp}', '${sampleTransactions[0].description}', '${sampleTransactions[0].transactionType}', '${sampleTransactions[0].accountNumber}', ${sampleTransactions[0].transactionCategory ? `'${sampleTransactions[0].transactionCategory}'` : null}),
+        ('${sampleTransactions[1].id}', ${sampleTransactions[1].amount}, '${sampleTransactions[1].timestamp}', '${sampleTransactions[1].description}', '${sampleTransactions[1].transactionType}', '${sampleTransactions[1].accountNumber}', ${sampleTransactions[1].transactionCategory ? `'${sampleTransactions[1].transactionCategory}'` : null}),
+        ('${sampleTransactions[2].id}', ${sampleTransactions[2].amount}, '${sampleTransactions[2].timestamp}', '${sampleTransactions[2].description}', '${sampleTransactions[2].transactionType}', '${sampleTransactions[2].accountNumber}', ${sampleTransactions[2].transactionCategory ? `'${sampleTransactions[2].transactionCategory}'` : null})
+        RETURNING *;
         `
       );
     } catch (error) {
