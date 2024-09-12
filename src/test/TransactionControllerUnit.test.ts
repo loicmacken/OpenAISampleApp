@@ -11,7 +11,7 @@ describe('Unit tests for TransactionController', () => {
     const res = createResponse<Response>();
     await getTransactions(req, res, () => { });
     expect(res.statusCode).toEqual(200);
-    expect(res._getJSONData()).toEqual(sampleTransactions);
+    expect(res.json()).toEqual(sampleTransactions);
   });
 
   it('should return a transaction by id', async () => {
@@ -23,7 +23,7 @@ describe('Unit tests for TransactionController', () => {
     const res = createResponse<Response>();
     await getTransactionById(req, res, () => { });
     expect(res.statusCode).toEqual(200);
-    expect(res._getJSONData()).toEqual(sampleTransactions[1]);
+    expect(res.json()).toEqual(sampleTransactions[1]);
   });
 
   it('should throw an error if transaction id is not found', async () => {
@@ -51,7 +51,7 @@ describe('Unit tests for TransactionController', () => {
     const res = createResponse<Response>();
     await createTransaction(req, res, () => {});
     expect(res.statusCode).toEqual(201);
-    expect(res._getJSONData()).toEqual(expect.objectContaining(req.body));
+    expect(res.json()).toEqual(expect.objectContaining(req.body));
   });
 
   it('should throw an error if transaction data is invalid', async () => {

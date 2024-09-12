@@ -13,7 +13,7 @@ describe('Unit tests for OpenAIController', () => {
     await classifyTransaction(req, res, () => { });
     expect(res.statusCode).toEqual(200);
     req.body.transactionCategory = "Groceries";
-    expect(res._getJSONData()).toEqual(req.body);
+    expect(res.json()).toEqual(req.body);
   });
 
   it('should throw an error if transaction data is invalid', async () => {
@@ -40,7 +40,7 @@ describe('Unit tests for OpenAIController', () => {
     req.body.forEach((transaction: any) => {
       transaction.transactionCategory = "Groceries";
     });
-    expect(res._getJSONData()).toEqual(req.body);
+    expect(res.json()).toEqual(req.body);
   });
 
   it('should throw an error if bulk transaction data is invalid', async () => {
