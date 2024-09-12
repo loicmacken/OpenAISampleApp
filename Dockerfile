@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+ARG NODE_ENV
+RUN if [ "$NODE_ENV" = "production" ]; then npm install --omit=dev; else npm install; fi
 
 COPY . .
 
@@ -12,4 +13,6 @@ ENV PORT=8080
 
 EXPOSE 8080
 
-CMD ["npm", "start"]
+ENV NODE_ENV $NODE_ENV
+
+CMD ["sh", "-c", "if [ \"$NODE_ENV\" = 'production' ]; then npm start; else npm run dev; fi"]
