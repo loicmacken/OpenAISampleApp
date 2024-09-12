@@ -1,11 +1,12 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import asyncHandler from 'express-async-handler'; 
 import csv from 'csvtojson';
 import { createRequest, createResponse } from 'node-mocks-http';
 import fs from 'fs';
 
 import { bulkCreateTransactions, getTransactions } from './TransactionController'
 
-export const importFromCsv = async (req: Request, res: Response) => {
+export const importFromCsv = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const csvFilePath = process.env.CSV_IMPORT_PATH as any;
   try {
     // TODO validate csvFilePath
@@ -14,7 +15,7 @@ export const importFromCsv = async (req: Request, res: Response) => {
       body: transactions
     });
     const res = createResponse<Response>();
-    await bulkCreateTransactions(req, res);
+    await bulkCreateTransactions(req, res, () => {});
   }
   catch (error) {
     console.error(error)
@@ -22,13 +23,13 @@ export const importFromCsv = async (req: Request, res: Response) => {
   }
   res.status(201).send('Transactions created successfully')
   return;
-}
+});
 
-export const exportToCsv = async (req: Request, res: Response) => {
+export const exportToCsv = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const csvFilePath = process.env.CSV_EXPORT_PATH as any;
   try {
     // TODO validate csvFilePath
-    const transactions = await getTransactions(req, res);
+    const transactions = await getTransactions(req, res, () => {});
     const csvString = ""; // TODO: Implement csvString
     fs.writeFileSync(csvFilePath, csvString);
   }
@@ -38,4 +39,4 @@ export const exportToCsv = async (req: Request, res: Response) => {
   }
   res.status(200).send('Transactions exported successfully')
   return;
-}
+});
