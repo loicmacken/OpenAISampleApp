@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 
 import TransactionCategory from './TransactionCategory';
 
-export const Transaction = {
+export default {
   id: {
     type: DataTypes.STRING(8),
     primaryKey: true,
@@ -42,4 +42,4 @@ export const Transaction = {
       isIn: [TransactionCategory]
     }
   }
-}
+};
