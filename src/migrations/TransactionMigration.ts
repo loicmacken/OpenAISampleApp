@@ -3,19 +3,27 @@ import pool from "../models/index";
 
 export default {
   up: async () => {
-    await pool.query(
-      `
-      CREATE TABLE transactions (
-        ${Transaction}
+    try {
+      await pool.query(
+        `
+        CREATE TABLE transactions (
+          ${Transaction}
+        );
+        `
       );
-      `
-    );
+    } catch (error) {
+      console.error(error);
+    }
   },
   down: async () => {
-    await pool.query(
-      `
-      DROP TABLE transactions;
-      `
-    );
+    try {
+      await pool.query(
+        `
+        DROP TABLE transactions;
+        `
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

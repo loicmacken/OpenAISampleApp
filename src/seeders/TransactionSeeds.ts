@@ -32,22 +32,33 @@ const samepleTransactions = [
 
 export default {
   up: async () => {
-    await pool.query(
-      `
-        INSERT INTO transactions (id, amount, timestamp, description, transactionType, accountNumber, transactionCategory)
-        VALUES 
-        ('${samepleTransactions[0].id}', ${samepleTransactions[0].amount}, '${samepleTransactions[0].timestamp}', '${samepleTransactions[0].description}', '${samepleTransactions[0].transactionType}', '${samepleTransactions[0].accountNumber}', ${samepleTransactions[0].transactionCategory ? `'${samepleTransactions[0].transactionCategory}'` : null}),
-        ('${samepleTransactions[1].id}', ${samepleTransactions[1].amount}, '${samepleTransactions[1].timestamp}', '${samepleTransactions[1].description}', '${samepleTransactions[1].transactionType}', '${samepleTransactions[1].accountNumber}', ${samepleTransactions[1].transactionCategory ? `'${samepleTransactions[1].transactionCategory}'` : null}),
-        ('${samepleTransactions[2].id}', ${samepleTransactions[2].amount}, '${samepleTransactions[2].timestamp}', '${samepleTransactions[2].description}', '${samepleTransactions[2].transactionType}', '${samepleTransactions[2].accountNumber}', ${samepleTransactions[2].transactionCategory ? `'${samepleTransactions[2].transactionCategory}'` : null})
-        RETURNING *;
-      `
-    );
+    try {
+      await pool.query(
+        `
+        CREATE TABLE transactions (
+          id VARCHAR(8) PRIMARY KEY NOT NULL UNIQUE CHECK (id ~ '^[a-zA-Z]{3}[0-9]{5}$'),
+          amount DECIMAL(10, 2) NOT NULL,
+          timestamp TIMESTAMP NOT NULL,
+          description VARCHAR(255),
+          transactionType VARCHAR(64) NOT NULL,
+          accountNumber VARCHAR(16) NOT NULL CHECK (accountNumber ~ '^[a-zA-Z]{6}[0-9]{10}$'),
+          transactionCategory VARCHAR(64) CHECK (transactionCategory IN ('Groceries', 'Dining Out', 'Utilities', 'Transportation', 'Entertainment', 'Healthcare', 'Shopping', 'Housing', 'Education', 'Miscellaneous'))
+        );
+        `
+      );
+    } catch (error) {
+      console.error(error);
+    }
   },
   down: async () => {
-    await pool.query(
-      `
-      DROP TABLE transactions;
-      `
-    );
+    try {
+      await pool.query(
+        `
+        DROP TABLE transactions;
+        `
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
