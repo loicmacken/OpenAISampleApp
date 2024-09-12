@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-import { describe, it } from 'mocha';
+import jest from 'jest';
 import { Request, Response } from 'express';
 import { createRequest, createResponse } from 'node-mocks-http';
 

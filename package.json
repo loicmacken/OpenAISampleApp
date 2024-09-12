@@ -29,6 +29,7 @@
     "csvtojson": "^2.0.10",
     "dotenv": "^16.4.5",
     "express": "^5.0.0",
+    "express-async-handler": "^1.2.0",
     "http": "^0.0.1-security",
     "jest": "^29.7.0",
     "mysql2": "^3.11.2",
