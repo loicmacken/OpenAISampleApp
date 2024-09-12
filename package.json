@@ -7,13 +7,10 @@
     "test": "cross-env NODE_ENV=test jest",
     "dev": "cross-env NODE_ENV=development node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
     "start": "cross-env NODE_ENV=production node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
-    "db:create": "sequelize-cli db:create",
-    "db:migrate": "sequelize-cli db:migrate",
-    "db:g:migration": "sequelize-cli migration:generate --name",
-    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
-    "db:seed": "sequelize-cli db:seed:all",
-    "db:g:seed": "sequelize-cli seed:generate --name",
-    "db:reseed": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all"
+    "db:migrate": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
+    "db:reset": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.down()\" && npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
+    "db:seeds": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\" && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
+    "db:reseed": "npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.down()\" && npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\" && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\""
   },
   "type": "module",
   "repository": {
@@ -34,6 +31,7 @@
     "@testcontainers/mysql": "^10.13.1",
     "@testcontainers/postgresql": "^10.13.1",
     "@types/jest": "^29.5.12",
+    "@types/pg": "^8.11.9",
     "cross-env": "^7.0.3",
     "csvtojson": "^2.0.10",
     "dotenv": "^16.4.5",
@@ -46,6 +44,7 @@
     "nodemon": "^3.1.4",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
+    "run-func": "^3.0.0",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
     "sinon": "^18.0.1",

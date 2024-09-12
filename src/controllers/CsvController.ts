@@ -4,7 +4,7 @@ import csv from 'csvtojson';
 import { createRequest, createResponse } from 'node-mocks-http';
 import fs from 'fs';
 
-import { bulkCreateTransactions, getTransactions } from './TransactionController'
+import { bulkCreateTransactions, getTransactions } from './TransactionController.js'
 
 export const importFromCsv = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const csvFilePath = process.env.CSV_IMPORT_PATH as any;
