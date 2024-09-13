@@ -23,7 +23,7 @@ describe('Integration tests for Transaction', () => {
     const res2 = createResponse<Response>();
     await getTransactionById(req2, res2, () => { });
     expect(res2.statusCode).toEqual(200);
-    req.body.transactionCategory = "Groceries";
+    req.body.transactioncategory = "Groceries";
     expect(res2._getJSONData()).toEqual(req.body);
 
     // Get all transactions and check that the new transaction is included

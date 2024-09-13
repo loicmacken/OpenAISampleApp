@@ -39,7 +39,7 @@ export const classifyTransaction = asyncHandler(async (req: Request, res: Respon
             "role": "system",
             "content": `You have a new transaction to classify. 
             All transactions should be classified into one of the following categories: `
-              + sampleTransactions.map((transaction: any) => transaction.transactionCategory).join(', ') + `.
+              + sampleTransactions.map((transaction: any) => transaction.transactioncategory).join(', ') + `.
             Please classify the following transaction: ` + req.body,
           }
         ],

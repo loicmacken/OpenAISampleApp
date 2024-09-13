@@ -29,7 +29,7 @@ export const exportToCsv = asyncHandler(async (req: Request, res: Response, next
     const header_row = "Transaction ID,Amount,Timestamp,Description,Transaction Type,Account Number,Transaction Category\n";
     let csvString = header_row;
     transactions.forEach((transaction: any) => {
-      csvString += `${transaction.id},${transaction.amount},${transaction.timestamp},${transaction.description},${transaction.transactionType},${transaction.accountNumber},${transaction.transactionCategory}\n`;
+      csvString += `${transaction.id},${transaction.amount},${transaction.timestamp},${transaction.description},${transaction.transactiontype},${transaction.accountnumber},${transaction.transactioncategory}\n`;
     });
     fs.writeFileSync(csvFilePath, csvString);
   }

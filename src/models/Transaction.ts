@@ -5,7 +5,7 @@ export default `
   amount DECIMAL(10, 2) NOT NULL,
   timestamp TIMESTAMP NOT NULL,
   description VARCHAR(255),
-  transactionType VARCHAR(64) NOT NULL,
-  accountNumber VARCHAR(16) NOT NULL CHECK (accountNumber ~ '^[a-zA-Z]{6}[0-9]{10}$'),
-  transactionCategory VARCHAR(64) CHECK (transactionCategory IN (${TransactionCategory.map(category => `'${category}'`).join(', ')}))
+  transactiontype VARCHAR(64) NOT NULL,
+  accountnumber VARCHAR(16) NOT NULL CHECK (accountNumber ~ '^[a-zA-Z]{6}[0-9]{10}$'),
+  transactioncategory VARCHAR(64) CHECK (category IN (${TransactionCategory.map(category => `'${category}'`).join(', ')}))
 `;

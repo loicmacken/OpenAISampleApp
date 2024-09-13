@@ -7,7 +7,7 @@ export default {
     try {
       await pool.query(
         `
-        INSERT INTO transactions (id, amount, timestamp, description, transactionType, accountNumber, transactionCategory)
+        INSERT INTO transactions (id, amount, timestamp, description, transactiontype, accountnumber, transactioncategory)
         VALUES 
         ('${sampleTransactions[0].id}', ${sampleTransactions[0].amount}, '${sampleTransactions[0].timestamp}', '${sampleTransactions[0].description}', '${sampleTransactions[0].transactiontype}', '${sampleTransactions[0].accountnumber}', ${sampleTransactions[0].transactioncategory ? `'${sampleTransactions[0].transactioncategory}'` : null}),
         ('${sampleTransactions[1].id}', ${sampleTransactions[1].amount}, '${sampleTransactions[1].timestamp}', '${sampleTransactions[1].description}', '${sampleTransactions[1].transactiontype}', '${sampleTransactions[1].accountnumber}', ${sampleTransactions[1].transactioncategory ? `'${sampleTransactions[1].transactioncategory}'` : null}),

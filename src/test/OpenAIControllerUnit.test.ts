@@ -12,7 +12,7 @@ describe('Unit tests for OpenAIController', () => {
     const res = createResponse<Response>();
     await classifyTransaction(req, res, () => { });
     expect(res.statusCode).toEqual(200);
-    req.body.transactionCategory = "Groceries";
+    req.body.transactioncategory = "Groceries";
     expect(res._getJSONData()).toEqual(req.body);
   });
 
@@ -38,7 +38,7 @@ describe('Unit tests for OpenAIController', () => {
     await bulkClassifyTransactions(req, res, () => { });
     expect(res.statusCode).toEqual(200);
     req.body.forEach((transaction: any) => {
-      transaction.transactionCategory = "Groceries";
+      transaction.transactioncategory = "Groceries";
     });
     expect(res._getJSONData()).toEqual(req.body);
   });
