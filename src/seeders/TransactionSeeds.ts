@@ -4,8 +4,9 @@ import sampleTransactions from "./sampleTransactions";
 
 export default {
   up: async () => {
+    const client = await pool.connect();
     try {
-      await pool.query(
+      await client.query(
         `
         INSERT INTO transactions (id, amount, timestamp, description, transactiontype, accountnumber, transactioncategory)
         VALUES 
@@ -17,17 +18,22 @@ export default {
       );
     } catch (error) {
       console.error(error);
+    } finally {
+      client.release();
     }
   },
   down: async () => {
+    const client = await pool.connect();
     try {
-      await pool.query(
+      await client.query(
         `
         DROP TABLE transactions;
         `
       );
     } catch (error) {
       console.error(error);
+    } finally {
+      client.release();
     }
   }
 };

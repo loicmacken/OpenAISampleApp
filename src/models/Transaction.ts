@@ -1,5 +1,3 @@
-import TransactionCategory from './TransactionCategory';
-
 export default `
   id VARCHAR(8) PRIMARY KEY NOT NULL UNIQUE CHECK (id ~ '^[a-zA-Z]{3}[0-9]{5}$'),
   amount DECIMAL(10, 2) NOT NULL,
@@ -7,5 +5,5 @@ export default `
   description VARCHAR(255),
   transactiontype VARCHAR(64) NOT NULL,
   accountnumber VARCHAR(16) NOT NULL CHECK (accountNumber ~ '^[a-zA-Z]{6}[0-9]{10}$'),
-  transactioncategory VARCHAR(64) CHECK (category IN (${TransactionCategory.map(category => `'${category}'`).join(', ')}))
+  transactioncategory VARCHAR(64)
 `;

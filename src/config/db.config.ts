@@ -15,6 +15,9 @@ export default {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME_TEST,
     port: process.env.DB_PORT,
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
   },
   production: {
     host: process.env.DB_HOST,

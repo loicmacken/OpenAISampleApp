@@ -1,7 +1,4 @@
-import e, { Request, Response, NextFunction } from 'express';
-import asyncHandler from 'express-async-handler';
 import OpenAI from 'openai';
-import { createRequest, createResponse } from 'node-mocks-http';
 
 import sampleOpenAIResponse from '../controllers/sampleOpenAIResponse';
 import sampleTransactions from '../seeders/sampleTransactions';
@@ -46,7 +43,7 @@ export const classifyTransaction = async (transaction: any) => {
     return transaction;
   }
 
-  throw new Error('Invalid transaction');
+  return undefined;
 }
 
 export const bulkClassifyTransactions = async (transactions: Array<any>) => {
@@ -56,11 +53,7 @@ export const bulkClassifyTransactions = async (transactions: Array<any>) => {
     if (!validateTransaction(transaction)) {
       continue;
     }
-    classifiedTransactions.push(classifyTransaction(transaction));
-  }
-
-  if (classifiedTransactions.length === 0) {
-    throw new Error('No valid transactions to classify');
+    classifiedTransactions.push(await classifyTransaction(transaction));
   }
   return classifiedTransactions;
 }
