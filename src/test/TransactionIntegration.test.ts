@@ -24,13 +24,13 @@ describe('Integration tests for Transaction', () => {
     await getTransactionById(req2, res2, () => { });
     expect(res2.statusCode).toEqual(200);
     req.body.transactionCategory = "Groceries";
-    expect(res2.json()).toEqual(req.body);
+    expect(res2._getJSONData()).toEqual(req.body);
 
     // Get all transactions and check that the new transaction is included
     const req3 = createRequest<Request>();
     const res3 = createResponse<Response>();
     await getTransactions(req3, res3, () => { });
     expect(res3.statusCode).toEqual(200);
-    expect(res3.json()).toContainEqual(req.body);
+    expect(res3._getJSONData()).toContainEqual(req.body);
   });
 });
