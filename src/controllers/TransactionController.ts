@@ -8,6 +8,7 @@ export const getTransactions = asyncHandler(async (req: Request, res: Response, 
   `;
   const { rows } = await pool.query(query);
   res.status(200).json(rows);
+  return;
 });
 
 export const getTransactionById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -18,8 +19,10 @@ export const getTransactionById = asyncHandler(async (req: Request, res: Respons
   const { rows } = await pool.query(query, [id]);
   if (rows.length === 0) {
     res.status(204).json({});
+    return;
   } else {
     res.status(200).json(rows[0]);
+    return;
   }
 });
 
