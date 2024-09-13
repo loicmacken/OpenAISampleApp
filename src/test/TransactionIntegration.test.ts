@@ -7,30 +7,38 @@ import sampleTransactions from '../seeders/sampleTransactions';
 
 describe('Integration tests for Transaction', () => {
   it('create a transaction, classify it correctly and return it when prompted', async () => {
+    let transaction: any = {
+      id: 'TRN00006',
+      amount: (-200.00).toFixed(2).toString(),
+      timestamp: new Date('2021-05-05').toISOString().slice(0, 19).replace('T', ' '),
+      description: 'Test transaction 6',
+      transactiontype: 'debit',
+      accountnumber: 'ACCOUN0123456789'
+    }
     // Create a new transaction which will be classified by the API
     const req = createRequest<Request>();
-    req.body = sampleTransactions[0];
+    req.body = transaction;
     const res = createResponse<Response>();
     await createTransaction(req, res, () => { });
-    expect(res.statusCode).toEqual(201);
-    
+    await expect(res.statusCode).toEqual(201);
+
     // Get the transaction by id and check that it was classified correctly
     const req2 = createRequest<Request>({
       params: {
-        id: req.body.id
+        id: transaction.id
       }
     });
     const res2 = createResponse<Response>();
     await getTransactionById(req2, res2, () => { });
-    expect(res2.statusCode).toEqual(200);
-    req.body.transactioncategory = "Groceries";
-    expect(res2._getJSONData()).toEqual(req.body);
+    await expect(res2.statusCode).toEqual(200);
+    transaction.transactioncategory = "Groceries";
+    await expect(res2._getJSONData()).toEqual(transaction);
 
     // Get all transactions and check that the new transaction is included
     const req3 = createRequest<Request>();
     const res3 = createResponse<Response>();
     await getTransactions(req3, res3, () => { });
-    expect(res3.statusCode).toEqual(200);
-    expect(res3._getJSONData()).toContainEqual(req.body);
+    await expect(res3.statusCode).toEqual(200);
+    await expect(res3._getJSONData()).toContainEqual(transaction);
   });
 });

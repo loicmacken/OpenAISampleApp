@@ -10,8 +10,8 @@ describe('Unit tests for TransactionController', () => {
     const req = createRequest<Request>();
     const res = createResponse<Response>();
     await getTransactions(req, res, () => { });
-    expect(res.statusCode).toEqual(200);
-    expect(res._getJSONData()).toEqual(sampleTransactions);
+    await expect(res.statusCode).toEqual(200);
+    await expect(res._getJSONData()).toEqual(sampleTransactions);
   });
 
   it('should return a transaction by id', async () => {
@@ -22,8 +22,8 @@ describe('Unit tests for TransactionController', () => {
     });
     const res = createResponse<Response>();
     await getTransactionById(req, res, () => { });
-    expect(res.statusCode).toEqual(200);
-    expect(res._getJSONData()).toEqual(sampleTransactions[1]);
+    await expect(res.statusCode).toEqual(200);
+    await expect(res._getJSONData()).toEqual(sampleTransactions[1]);
   });
 
   it('should return no content response if transaction id is not found', async () => {
@@ -34,11 +34,11 @@ describe('Unit tests for TransactionController', () => {
     });
     const res = createResponse<Response>();
     await getTransactionById(req, res, () => { });
-    expect(res.statusCode).toEqual(204);
+    await expect(res.statusCode).toEqual(204);
   });
 
   it('should create a new transaction', async () => {
-    const req = createRequest<Request>({
+    const req = {
       body: {
         id: 'TRN00004',
         amount: (-200.00).toFixed(2).toString(),
@@ -48,30 +48,32 @@ describe('Unit tests for TransactionController', () => {
         accountnumber: 'ACCOUN0123456789',
         transactioncategory: 'Groceries'
       }
-    });
+    };
     const res = createResponse<Response>();
-    await createTransaction(req, res, () => {});
-    expect(res.statusCode).toEqual(201);
-    expect(res._getJSONData()).toEqual(expect.objectContaining(req.body));
+    console.log("In unit test: " + JSON.stringify(req));
+    await createTransaction(req as Request, res, () => {});
+    await expect(res.statusCode).toEqual(201);
+    await expect(res._getJSONData()).toEqual(expect.objectContaining(req.body));
   });
 
   it('should create a new transaction and classify it correctly', async () => {
     let transaction: any = {
-      id: 'TRN00004',
+      id: 'TRN00005',
       amount: (-200.00).toFixed(2).toString(),
       timestamp: new Date('2021-05-05').toISOString().slice(0, 19).replace('T', ' '),
-      description: 'Test transaction 4',
+      description: 'Test transaction 5',
       transactiontype: 'debit',
       accountnumber: 'ACCOUN0123456789'
     }
+    console.log("In unit test, transaction: " + JSON.stringify(transaction));
     const req = createRequest<Request>({
       body: transaction
     });
     const res = createResponse<Response>();
     await createTransaction(req, res, () => {});
-    expect(res.statusCode).toEqual(201);
+    await expect(res.statusCode).toEqual(201);
     transaction.transactioncategory = 'Groceries';
-    expect(res._getJSONData()).toEqual(transaction);
+    await expect(res._getJSONData()).toEqual(transaction);
   });
 
   it('should throw an error if transaction data is invalid', async () => {
@@ -83,7 +85,7 @@ describe('Unit tests for TransactionController', () => {
     });
     const res = createResponse<Response>();
     await createTransaction(req, res, () => {});
-    expect(res.statusCode).toEqual(400);
+    await expect(res.statusCode).toEqual(400);
   });
 });
 
