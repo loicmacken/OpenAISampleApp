@@ -26,7 +26,7 @@ describe('Unit tests for TransactionController', () => {
     expect(res._getJSONData()).toEqual(sampleTransactions[1]);
   });
 
-  it('should throw an error if transaction id is not found', async () => {
+  it('should return no content response if transaction id is not found', async () => {
     const req = createRequest<Request>({
       params: {
         id: '999999999'
