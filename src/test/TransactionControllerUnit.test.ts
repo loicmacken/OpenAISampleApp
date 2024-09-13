@@ -44,8 +44,8 @@ describe('Unit tests for TransactionController', () => {
         amount: -200.00,
         timestamp: new Date().toISOString().slice(0, 19).replace('T', ' '),
         description: 'Test transaction 4',
-        transactionType: 'debit',
-        accountNumber: 'ACCOUN0123456789'
+        transactiontype: 'debit',
+        accountnumber: 'ACCOUN0123456789'
       }
     });
     const res = createResponse<Response>();
