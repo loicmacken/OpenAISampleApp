@@ -3,12 +3,12 @@ import asyncHandler from 'express-async-handler';
 import OpenAI from 'openai';
 import { createRequest, createResponse } from 'node-mocks-http';
 
-import sampleOpenAIResponse from './sampleOpenAIResponse';
+import sampleOpenAIResponse from '../controllers/sampleOpenAIResponse';
 import sampleTransactions from '../seeders/sampleTransactions';
 import validateTransaction from '../validators/TransactionValidator';
 
-export const classifyTransaction = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  if (validateTransaction(req.body)) {
+export const classifyTransaction = async (transaction: any) => {
+  if (validateTransaction(transaction)) {
     let openAIResponse: any;
 
     // skip openAI API call in test and dev environment
@@ -30,7 +30,7 @@ export const classifyTransaction = asyncHandler(async (req: Request, res: Respon
             "content": `You have a new transaction to classify. 
             All transactions should be classified into one of the following categories: `
               + sampleTransactions.map((transaction: any) => transaction.transactioncategory).join(', ') + `.
-            Please classify the following transaction: ` + req.body,
+            Please classify the following transaction: ` + transaction,
           }
         ],
         logprobs: true,
@@ -42,29 +42,25 @@ export const classifyTransaction = asyncHandler(async (req: Request, res: Respon
 
     // return transaction with category
     const category = openAIResponse.choices[0].logprobs.content[0].top_logprobs[0].token;
-    req.body.transactioncategory = category;
-    res.status(200).json(req.body);
-    return;
+    transaction.transactioncategory = category;
+    return transaction;
   }
-  else {
-    res.status(400).json({ message: 'Invalid transaction data' });
-    return;
-  }
-});
 
-export const bulkClassifyTransactions = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const transactions = req.body;
+  throw new Error('Invalid transaction');
+}
+
+export const bulkClassifyTransactions = async (transactions: Array<any>) => {
+  let classifiedTransactions: Array<any> = [];
 
   for (const transaction of transactions) {
     if (!validateTransaction(transaction)) {
-      res.status(400).json({ message: 'Invalid transaction data' });
-      return;
+      continue;
     }
-    const individualReq = createRequest<Request>();
-    individualReq.body = transaction;
-    const individualRes = createResponse<Response>();
-    classifyTransaction(individualReq, individualRes, () => {});
+    classifiedTransactions.push(classifyTransaction(transaction));
   }
 
-  res.status(200).json(transactions);
-});
+  if (classifiedTransactions.length === 0) {
+    throw new Error('No valid transactions to classify');
+  }
+  return classifiedTransactions;
+}
