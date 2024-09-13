@@ -41,8 +41,8 @@ describe('Unit tests for TransactionController', () => {
     const req = createRequest<Request>({
       body: {
         id: 'TRN00004',
-        amount: -200.00,
-        timestamp: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        amount: (-200.00).toFixed(2).toString(),
+        timestamp: new Date('2021-05-05').toISOString().slice(0, 19).replace('T', ' '),
         description: 'Test transaction 4',
         transactiontype: 'debit',
         accountnumber: 'ACCOUN0123456789'
