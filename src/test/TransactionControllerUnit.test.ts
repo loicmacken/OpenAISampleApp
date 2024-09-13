@@ -45,13 +45,33 @@ describe('Unit tests for TransactionController', () => {
         timestamp: new Date('2021-05-05').toISOString().slice(0, 19).replace('T', ' '),
         description: 'Test transaction 4',
         transactiontype: 'debit',
-        accountnumber: 'ACCOUN0123456789'
+        accountnumber: 'ACCOUN0123456789',
+        transactioncategory: 'Groceries'
       }
     });
     const res = createResponse<Response>();
     await createTransaction(req, res, () => {});
     expect(res.statusCode).toEqual(201);
     expect(res._getJSONData()).toEqual(expect.objectContaining(req.body));
+  });
+
+  it('should create a new transaction and classify it correctly', async () => {
+    let transaction: any = {
+      id: 'TRN00004',
+      amount: (-200.00).toFixed(2).toString(),
+      timestamp: new Date('2021-05-05').toISOString().slice(0, 19).replace('T', ' '),
+      description: 'Test transaction 4',
+      transactiontype: 'debit',
+      accountnumber: 'ACCOUN0123456789'
+    }
+    const req = createRequest<Request>({
+      body: transaction
+    });
+    const res = createResponse<Response>();
+    await createTransaction(req, res, () => {});
+    expect(res.statusCode).toEqual(201);
+    transaction.transactioncategory = 'Groceries';
+    expect(res._getJSONData()).toEqual(transaction);
   });
 
   it('should throw an error if transaction data is invalid', async () => {
