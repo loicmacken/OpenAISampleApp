@@ -18,7 +18,7 @@ const validateTransaction = (transaction: any) => {
 }
 
 export const classifyTransaction = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  if (!validateTransaction(req.body)) {
+  if (validateTransaction(req.body)) {
     let openAIResponse: any;
 
     // skip openAI API call in test and dev environment
