@@ -21,7 +21,7 @@ export const getTransactions = asyncHandler(async (req: Request, res: Response, 
 export const getTransactionById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const query = `
-    SELECT * FROM transactions WHERE id = ${id};
+    SELECT * FROM transactions WHERE id = '${id}';
   `;
  
   const client = await pool.connect();
