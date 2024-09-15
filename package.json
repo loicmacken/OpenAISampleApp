@@ -50,7 +50,8 @@
     "sequelize-cli": "^6.6.2",
     "sinon": "^18.0.1",
     "testcontainers": "^10.13.1",
-    "ts-jest": "^29.2.5"
+    "ts-jest": "^29.2.5",
+    "tsx": "^4.19.1"
   },
   "devDependencies": {
     "@tsconfig/node-lts-strictest-esm": "^18.12.1",
