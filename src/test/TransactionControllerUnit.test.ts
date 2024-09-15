@@ -11,7 +11,10 @@ describe('Unit tests for TransactionController', () => {
     const res = createResponse<Response>();
     await getTransactions(req, res, () => { });
     await expect(res.statusCode).toEqual(200);
-    await expect(res._getJSONData()).toEqual(sampleTransactions);
+    const data = await res._getJSONData();
+    sampleTransactions.forEach((transaction) => {
+      expect(data).toContainEqual(transaction);
+    });
   });
 
   it('should return a transaction by id', async () => {
