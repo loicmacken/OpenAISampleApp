@@ -15,4 +15,4 @@ EXPOSE 8080
 
 ENV NODE_ENV $NODE_ENV
 
-CMD ["sh", "-c", "if [ \"$NODE_ENV\" = 'production' ]; then npm start; else npm run dev; fi"]
+CMD ["sh", "-c", "if [ \"$NODE_ENV\" = 'production' ]; then npm start; elif [ \"$NODE_ENV\" = 'test' ]; then npm run test; else npm run dev; fi"]
