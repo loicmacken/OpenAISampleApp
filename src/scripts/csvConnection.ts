@@ -9,7 +9,18 @@ export default {
   importFromCsv: async () => {
     const csvFilePath = process.env.CSV_IMPORT_PATH as any;
     try {
-      const transactions = await csv().fromFile(csvFilePath)
+      const rows = await csv().fromFile(csvFilePath)
+      const transactions = rows.map((row: any) => {
+        return {
+          id: row["Transaction ID"],
+          amount: row["Amount"],
+          timestamp: row["Timestamp"].slice(0, 19),
+          description: row["Description"],
+          transactiontype: row["Transaction Type"],
+          accountnumber: row["Account Number"],
+          transactioncategory: row["Transaction Category"]
+        }
+      });
       const req = createRequest<Request>({
         body: transactions
       });
