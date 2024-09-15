@@ -27,7 +27,7 @@ export const classifyTransaction = async (transaction: any) => {
             "content": `You have a new transaction to classify. 
             All transactions should be classified into one of the following categories: `
               + sampleTransactions.map((transaction: any) => transaction.transactioncategory).join(', ') + `.
-            Please classify the following transaction: ` + transaction,
+            Please classify the following transaction: ` + transaction.description,
           }
         ],
         logprobs: true,
@@ -53,7 +53,11 @@ export const bulkClassifyTransactions = async (transactions: Array<any>) => {
     if (!validateTransaction(transaction)) {
       continue;
     }
-    classifiedTransactions.push(await classifyTransaction(transaction));
+    let classifiedTransaction = transaction;
+    if (classifiedTransaction.transactioncategory === null) {
+      classifiedTransaction = await classifyTransaction(transaction);
+    }
+    classifiedTransactions.push(classifiedTransaction);
   }
   return classifiedTransactions;
 }

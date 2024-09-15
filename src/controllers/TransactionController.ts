@@ -83,6 +83,11 @@ export const bulkCreateTransactions = asyncHandler(async (req: Request, res: Res
     return;
   }
 
+  req.body.map((transaction: any) => {
+    if (!transaction.description) { transaction.description = ""; }
+    if (!transaction.transactioncategory) { transaction.transactioncategory = null; }
+  });
+
   const classifiedTransactions = await bulkClassifyTransactions(req.body);
   if (classifiedTransactions.length < 1) {
     res.status(400).json({ error: "Invalid transaction data" });
