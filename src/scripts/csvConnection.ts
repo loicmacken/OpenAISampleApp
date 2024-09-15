@@ -21,11 +21,11 @@ export const importFromCsv = asyncHandler(async () => {
   }
 });
 
-export const exportToCsv = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+export const exportToCsv = asyncHandler(async (req: Request, res: any, next: NextFunction) => {
   const csvFilePath = process.env.CSV_EXPORT_PATH as any;
   try {
     await getTransactions(req, res, () => {});
-    const transactions = res.json() as any;
+    const transactions = res._getJSONData() as any;
     const header_row = "Transaction ID,Amount,Timestamp,Description,Transaction Type,Account Number,Transaction Category\n";
     let csvString = header_row;
     transactions.forEach((transaction: any) => {
