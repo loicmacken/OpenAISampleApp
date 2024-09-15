@@ -10,7 +10,9 @@
     "db:migrate": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
     "db:reset": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.down()\" && npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
     "db:seeds": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\" && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
-    "db:reseed": "npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.down()\" && npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\" && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\""
+    "db:reseed": "npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.down()\" && npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\" && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
+    "db:importcsv": "npx tsx -e \"import csv from './src/scripts/csvConnection'; csv.importFromCsv()\"",
+    "db:exportcsv": "npx tsx -e \"import csv from './src/scripts/csvConnection'; csv.exportToCsv()\""
   },
   "type": "module",
   "repository": {
