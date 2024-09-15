@@ -52,27 +52,24 @@ export const createTransaction = asyncHandler(async (req: Request, res: Response
     }
 
     const query = `
-    INSERT INTO transactions (amount, timestamp, description, transactiontype, accountnumber, transactioncategory)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING *;
-  `;
-    const values =  [
-      transaction.id,
-      transaction.amount,
-      transaction.timestamp,
-      transaction.description,
-      transaction.transactiontype,
-      transaction.accountnumber,
-      transaction.transactioncategory
-    ];
+      INSERT INTO transactions (id, amount, timestamp, description, transactiontype, accountnumber, transactioncategory)
+      VALUES (
+        '${transaction.id}',
+        '${transaction.amount}',
+        '${transaction.timestamp}',
+        '${transaction.description}',
+        '${transaction.transactiontype}',
+        '${transaction.accountnumber}',
+        '${transaction.transactioncategory}'
+      )
+      RETURNING *;
+    `;
 
     const client = await pool.connect();
-    await client.query(query, values).then((result: any) => {
+    await client.query(query).then((result: any) => {
       res.status(201).json(result.rows[0]);
       client.release();
     });
-
-    return;
   }
   else {
     res.status(400).json({ error: "Invalid transaction data" });
@@ -91,26 +88,34 @@ export const bulkCreateTransactions = asyncHandler(async (req: Request, res: Res
     res.status(400).json({ error: "Invalid transaction data" });
     return;
   }
+  
+  let ids: Array<string> = [];
+  let amounts: Array<string> = [];
+  let timestamps: Array<string> = [];
+  let descriptions: Array<string> = [];
+  let transactiontypes: Array<string> = [];
+  let accountnumbers: Array<string> = [];
+  let transactioncategories: Array<string> = [];
+  
+  classifiedTransactions.forEach((transaction: any) => {
+    ids.push(transaction.id);
+    amounts.push(transaction.amount);
+    timestamps.push(transaction.timestamp);
+    descriptions.push(transaction.description);
+    transactiontypes.push(transaction.transactiontype);
+    accountnumbers.push(transaction.accountnumber);
+    transactioncategories.push(transaction.transactioncategory);
+  })
+
   const query = `
-    INSERT INTO transactions (amount, timestamp, description, transactiontype, accountnumber, transactioncategory)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO transactions (id, amount, timestamp, description, transactiontype, accountnumber, transactioncategory)
+    VALUES ('${ids}', '${amounts}' , '${timestamps}', '${descriptions}', '${transactiontypes}', '${accountnumbers}', '${transactioncategories}')
     RETURNING *;
   `;
-  const values = classifiedTransactions.map((transaction: any) => [
-    transaction.id,
-    transaction.amount,
-    transaction.timestamp,
-    transaction.description,
-    transaction.transactiontype,
-    transaction.accountnumber,
-    transaction.transactioncategory
-  ]);
 
   const client = await pool.connect();
-  await client.query(query, values).then((result: any) => {
+  await client.query(query).then((result: any) => {
     res.status(201).json(result.rows);
     client.release();
   });
-
-  return;
 });
