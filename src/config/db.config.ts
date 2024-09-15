@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config({override: false});
+dotenv.config();
 
 export default {
   development: {
