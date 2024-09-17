@@ -1,5 +1,4 @@
 import pg from 'pg';
-import Transaction from './Transaction';
 
 // Parse date and time to string to avoid timezone conversion
 pg.types.setTypeParser(pg.types.builtins.TIME, (timeStr) => timeStr);
