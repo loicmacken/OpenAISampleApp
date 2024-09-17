@@ -1,9 +1,8 @@
 import jest from 'jest';
 import { classifyTransaction, bulkClassifyTransactions } from '../services/OpenAIService';
 import sampleTransactions from '../seeders/sampleTransactions';
-import exp from 'constants';
 
-describe('Unit tests for OpenAIController', () => {
+describe('Unit tests for OpenAIService', () => {
   it('should classify a single transaction', async () => {
     const transaction = sampleTransactions[0];
     const classifiedTransaction = await classifyTransaction(transaction);
