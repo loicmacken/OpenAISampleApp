@@ -15,10 +15,10 @@ export default {
           id: row["Transaction ID"],
           amount: row["Amount"],
           timestamp: row["Timestamp"].slice(0, 19),
-          description: row["Description"],
+          description: row["Description"]? row["Description"] : "",
           transactiontype: row["Transaction Type"],
           accountnumber: row["Account Number"],
-          transactioncategory: row["Transaction Category"]
+          transactioncategory: row["Transaction Category"]? row["Transaction Category"] : null
         }
       });
       const req = createRequest<Request>({
@@ -45,7 +45,14 @@ export default {
       const header_row = "Transaction ID,Amount,Timestamp,Description,Transaction Type,Account Number,Transaction Category\n";
       let csvString = header_row;
       transactions.forEach((transaction: any) => {
-        csvString += `${transaction.id},${transaction.amount},${transaction.timestamp},${transaction.description},${transaction.transactiontype},${transaction.accountnumber},${transaction.transactioncategory}\n`;
+        csvString += `
+          ${transaction.id},
+          ${transaction.amount},
+          ${transaction.timestamp},
+          ${transaction.description? transaction.description : ""},
+          ${transaction.transactiontype},
+          ${transaction.accountnumber},
+          ${transaction.transactioncategory? transaction.transactioncategory : null}\n`;
       });
       fs.writeFileSync(csvFilePath, csvString);
     }
