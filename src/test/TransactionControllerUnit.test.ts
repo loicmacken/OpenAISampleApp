@@ -53,7 +53,6 @@ describe('Unit tests for TransactionController', () => {
       }
     };
     const res = createResponse<Response>();
-    console.log("In unit test: " + JSON.stringify(req));
     await createTransaction(req as Request, res, () => {});
     await expect(res.statusCode).toEqual(201);
     await expect(res._getJSONData()).toEqual(expect.objectContaining(req.body));
@@ -68,7 +67,6 @@ describe('Unit tests for TransactionController', () => {
       transactiontype: 'debit',
       accountnumber: 'ACCOUN0123456789'
     }
-    console.log("In unit test, transaction: " + JSON.stringify(transaction));
     const req = createRequest<Request>({
       body: transaction
     });
