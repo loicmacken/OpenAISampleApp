@@ -84,42 +84,27 @@ export const bulkCreateTransactions = asyncHandler(async (req: Request, res: Res
   }
 
   req.body.map((transaction: any) => {
+    if (!validateTransaction(transaction)) {
+      res.status(400).json({ error: "Invalid transaction data" });
+      return;
+    }
     if (!transaction.description) { transaction.description = ""; }
     if (!transaction.transactioncategory) { transaction.transactioncategory = null; }
   });
-
-  let classifiedTransactions;
-  if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
-    classifiedTransactions = req.body;
-  } else {
-    classifiedTransactions = await bulkClassifyTransactions(req.body);
-  }
+  
+  const classifiedTransactions = await bulkClassifyTransactions(req.body);
   if (classifiedTransactions.length < 1) {
     res.status(400).json({ error: "Invalid transaction data" });
     return;
   }
-  
-  let ids: Array<string> = [];
-  let amounts: Array<string> = [];
-  let timestamps: Array<string> = [];
-  let descriptions: Array<string> = [];
-  let transactiontypes: Array<string> = [];
-  let accountnumbers: Array<string> = [];
-  let transactioncategories: Array<string> = [];
-  
-  classifiedTransactions.forEach((transaction: any) => {
-    ids.push(transaction.id);
-    amounts.push(transaction.amount);
-    timestamps.push(transaction.timestamp);
-    descriptions.push(transaction.description);
-    transactiontypes.push(transaction.transactiontype);
-    accountnumbers.push(transaction.accountnumber);
-    transactioncategories.push(transaction.transactioncategory);
-  })
+
+  const values = classifiedTransactions.map((transaction: any) => {
+    return `('${transaction.id}', ${transaction.amount}, '${transaction.timestamp}', '${transaction.description}', '${transaction.transactiontype}', '${transaction.accountnumber}', '${transaction.transactioncategory}')`;
+  }).join(',');
 
   const query = `
     INSERT INTO transactions (id, amount, timestamp, description, transactiontype, accountnumber, transactioncategory)
-    VALUES ('${ids}', '${amounts}' , '${timestamps}', '${descriptions}', '${transactiontypes}', '${accountnumbers}', '${transactioncategories}')
+    VALUES ${values}
     RETURNING *;
   `;
 
