@@ -5,12 +5,12 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "cross-env NODE_ENV=test && npm run db:seeds && jest",
-    "dev": "cross-env NODE_ENV=development node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
+    "dev": "cross-env NODE_ENV=development && npm run db:seeds && node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
     "start": "cross-env NODE_ENV=production node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
     "db:migrate": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
-    "db:reset": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.down()\" && npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
-    "db:seeds": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\" && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
-    "db:reseed": "npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.down()\" && npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\" && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
+    "db:reset": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.down()\" && npm run db:migrate",
+    "db:seeds": "npm run db:migrate && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
+    "db:reseed": "npm run db:reset && npm run db:seeds",
     "db:importcsv": "npx tsx -e \"import csv from './src/scripts/csvConnection'; csv.importFromCsv()\"",
     "db:exportcsv": "npx tsx -e \"import csv from './src/scripts/csvConnection'; csv.exportToCsv()\""
   },
