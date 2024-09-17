@@ -44,7 +44,7 @@ const openAIClassifyTransactions = async (transactions: Array<any>) => {
 
 export const classifyTransaction = async (transaction: any) => {
   if (validateTransaction(transaction)) {
-    const [classifiedTransaction]: any =  openAIClassifyTransactions([transaction]);
+    const [classifiedTransaction]: any =  await openAIClassifyTransactions([transaction]);
     return classifiedTransaction;
   }
 
