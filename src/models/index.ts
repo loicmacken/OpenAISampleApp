@@ -11,16 +11,4 @@ import dbConfig from '../config/db.config';
 const config = dbConfig[process.env.NODE_ENV as 'development' | 'test' | 'production'];
 const pool = new pg.Pool(config as any);
 
-pool.connect().then((client) => {
-  client.query(
-    `
-        CREATE TABLE transactions (
-          ${Transaction}
-          );
-        `
-  ).then(() => {
-    client.release();
-  });
-});
-
 export default pool;
