@@ -140,3 +140,4 @@ data
 
 # docker-compose development file
 docker-compose.dev.yml
+docker-compose.test.yml
