@@ -43,18 +43,20 @@ const openAIClassifyTransactions = async (transactions: Array<any>) => {
 }
 
 export const classifyTransaction = async (transaction: any) => {
-  if (validateTransaction(transaction)) {
-    const [classifiedTransaction]: any =  await openAIClassifyTransactions([transaction]);
-    return classifiedTransaction;
+  if (!validateTransaction(transaction)) {
+    console.error("Invalid transaction data");
+    return undefined;
   }
-
-  return undefined;
+  
+  const [classifiedTransaction]: any =  await openAIClassifyTransactions([transaction]);
+  return classifiedTransaction;
 }
 
 export const bulkClassifyTransactions = async (transactions: Array<any>) => {
   for (const transaction of transactions) {
     if (!validateTransaction(transaction)) {
       console.error("Invalid transaction data");
+      return [];
     }
   }
 
