@@ -1,7 +1,34 @@
 import OpenAI from 'openai';
 
-import sampleTransactions from '../seeders/sampleTransactions';
+import TransactionCategory from '../models/TransactionCategory';
 import validateTransaction from '../validators/TransactionValidator';
+
+const openAIClassifySingleTransaction = async (transaction: any) => {
+  const key = process.env.OPENAI_API_KEY;
+  const client = new OpenAI({
+    apiKey: key
+  });
+  const openAIreq = {
+    model: 'gpt-4o-mini',
+    messages: [{
+        "role": "system",
+        "content": `You have a new transaction to classify. 
+        All transactions should be classified into one of the following categories: `
+          + TransactionCategory.join(', ') + `.
+        Please classify the following transaction: ` + transaction.description
+          + ` as a response, please provide only category of the transaction as a single word. Example: Groceries`
+    }],
+    logprobs: true,
+    n: 1,
+    top_logprobs: 10
+  };
+  const openAIResponse = await client.chat.completions.create(openAIreq as any) as any;
+
+  // return transactions with category
+  transaction.transactioncategory = openAIResponse.choices[0].message.content;
+
+  return transaction;
+}
 
 const openAIClassifyTransactions = async (transactions: Array<any>) => {
   // skip openAI API call in test and dev environment
@@ -12,34 +39,12 @@ const openAIClassifyTransactions = async (transactions: Array<any>) => {
     return transactions;
   }
 
-  // call openAI API to classify transactions
-  const key = process.env.OPENAI_API_KEY;
-  const client = new OpenAI({
-    apiKey: key
-  });
-  const openAIreq = {
-    model: 'gpt-4o-mini',
-    messages: transactions.map((transaction: any) => {
-      return {
-        "role": "system",
-        "content": `You have a new transaction to classify. 
-        All transactions should be classified into one of the following categories: `
-          + sampleTransactions.map((transaction: any) => transaction.transactioncategory).join(', ') + `.
-        Please classify the following transaction: ` + transaction.description,
-      };
-    }),
-    logprobs: true,
-    n: 1,
-    top_logprobs: 10
-  };
-  const openAIResponse = await client.chat.completions.create(openAIreq as any) as any;
+  let classifiedTransactions: Array<any> = []
+  for (const transaction of transactions) {
+    classifiedTransactions.push(await openAIClassifySingleTransaction(transaction));
+  }
 
-  // return transactions with category
-  openAIResponse.choices.map((choice: any, index: number) => {
-    transactions[index].transactioncategory = choice.logprobs.content[0].top_logprobs[0].token;
-  });
-
-  return transactions;
+  return await classifiedTransactions;
 }
 
 export const classifyTransaction = async (transaction: any) => {
