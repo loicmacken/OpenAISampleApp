@@ -23,7 +23,7 @@ export const getTransactionById = asyncHandler(async (req: Request, res: Respons
   const query = `
     SELECT * FROM transactions WHERE id = '${id}';
   `;
- 
+
   const client = await pool.connect();
   await client.query(query).then((result) => {
     if (result.rows.length === 0) {
@@ -39,13 +39,13 @@ export const getTransactionById = asyncHandler(async (req: Request, res: Respons
 
 export const createTransaction = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   let transaction = req.body;
-  if (!transaction.description) { transaction.description = ""; }
-  if (!transaction.transactioncategory) { transaction.transactioncategory = null; }
+  (transaction||{}).description = transaction.description || "";
+  (transaction||{}).transactioncategory = transaction.transactioncategory || null;
 
   if (validateTransaction(transaction)) {
     if (transaction.transactioncategory === null) {
       transaction = await classifyTransaction(transaction);
-      if (!transaction) {
+      if (transaction === undefined) {
         res.status(400).json({ error: "Invalid transaction data" });
         return;
       }
@@ -88,10 +88,10 @@ export const bulkCreateTransactions = asyncHandler(async (req: Request, res: Res
       res.status(400).json({ error: "Invalid transaction data" });
       return;
     }
-    if (!transaction.description) { transaction.description = ""; }
-    if (!transaction.transactioncategory) { transaction.transactioncategory = null; }
+    (transaction||{}).description = transaction.description || "";
+    (transaction||{}).transactioncategory = transaction.transactioncategory || null;
   });
-  
+
   const classifiedTransactions = await bulkClassifyTransactions(req.body);
   if (classifiedTransactions.length < 1) {
     res.status(400).json({ error: "Invalid transaction data" });
