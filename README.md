@@ -32,17 +32,6 @@ Now you can access the api from the following url:
 ## API Documentation
 
 The API contains the following endpoints:
-- POST `/transactions`: submit a new transaction. Example request:
-```
-  curl -XPOST -H "Content-type: application/json" -d '{
-      "id": "TRN10009",
-      "amount": "-200.00",
-      "timestamp": "2021-05-05 00:00:00",
-      "description": "Rent Payment",
-      "transactiontype": "debit",
-      "accountnumber": "ACCOUN0123456789"
-  }' 'localhost:6868/transactions'
-```
 - GET `/transactions`: returns all transactions. Example request:
 ```
   curl -XGET 'localhost:6868/transactions'
@@ -51,28 +40,63 @@ The API contains the following endpoints:
 ```
   [
     {
-      "id": "TRN00004",
-      "amount": "-200.00",
-      "timestamp": "2021-05-05 00:00:00",
-      "description": "Test transaction 4",
-      "transactiontype": "debit",
-      "accountnumber": "ACCOUN0123456789",
-      "transactioncategory": "Groceries"
+        "id": "TRN10010",
+        "amount": "-200.00",
+        "timestamp": "2021-05-05 00:00:00",
+        "description": "Rent Payment",
+        "transactiontype": "debit",
+        "accountnumber": "ACCOUN0123456789",
+        "transactioncategory": "Utilities"
     },
     {
-      "id": "TRN00005",
-      "amount": "-200.00",
-      "timestamp": "2021-05-05 00:00:00",
-      "description": "Test transaction 5",
-      "transactiontype": "debit",
-      "accountnumber": "ACCOUN0123456789",
-      "transactioncategory": "Groceries"
+        "id": "TRN10011",
+        "amount": "-50.00",
+        "timestamp": "2021-05-12 00:00:00",
+        "description": "Albert-Heijn Purchase",
+        "transactiontype": "credit",
+        "accountnumber": "ACCOUN0123456789",
+        "transactioncategory": "Groceries"
     }
   ]
 ```
-- GET `/transactions/:id`: returns a single transaction. Response body is the same but contains only one transaction object. Example request:
+- GET `/transactions/:id`: returns a single transaction. Example request:
 ```
-  curl -XGET 'localhost:6868/transactions'
+  curl -XGET 'localhost:6868/transactions/TRN10010'
+```
+- Example response body:
+```
+  {
+      "id": "TRN10010",
+      "amount": "-200.00",
+      "timestamp": "2021-05-05 00:00:00",
+      "description": "Rent Payment",
+      "transactiontype": "debit",
+      "accountnumber": "ACCOUN0123456789",
+      "transactioncategory": "Utilities"
+  }
+```
+- POST `/transactions`: create a new transaction and classify it using the OpenAI API. Returns the classified transaction. Example request:
+```
+  curl -XPOST -H "Content-type: application/json" -d '{
+      "id": "TRN10010",
+      "amount": "-200.00",
+      "timestamp": "2021-05-05 00:00:00",
+      "description": "Rent Payment",
+      "transactiontype": "debit",
+      "accountnumber": "ACCOUN0123456789"
+  }' 'localhost:6868/transactions'
+```
+- Example response:
+```
+  {
+      "id": "TRN10010",
+      "amount": "-200.00",
+      "timestamp": "2021-05-05 00:00:00",
+      "description": "Rent Payment",
+      "transactiontype": "debit",
+      "accountnumber": "ACCOUN0123456789",
+      "transactioncategory": "Utilities"
+  }
 ```
 
 ### Import and export CSV data
