@@ -1,6 +1,6 @@
 import pool from "../models/index";
 
-import sampleTransactions from "./sampleTransactions";
+import { sampleTransactions } from "./sampleTransactions";
 
 export default {
   up: async () => {

@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Request, Response, Router } from 'express';
 import { getTransactions, getTransactionById, createTransaction } from '../controllers/TransactionController.js';
 
-const router = express.Router();
+const router: Router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req: Request, res: Response) => {
   res.send(`
     <h1>Welcome to the Transaction API</h1>
     <p>Use the following endpoints to interact with the API:</p>

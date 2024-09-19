@@ -1,4 +1,4 @@
-export default [
+export const TransactionCategory: Array<string> = [
   "Groceries",
   "Dining Out",
   "Utilities",

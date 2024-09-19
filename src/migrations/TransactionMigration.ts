@@ -1,4 +1,4 @@
-import Transaction from "../models/Transaction";
+import { TransactionQuery } from "../models/Transaction";
 import pool from "../models/index";
 
 export default {
@@ -8,7 +8,7 @@ export default {
       await client.query(
         `
         CREATE TABLE transactions (
-          ${Transaction}
+          ${TransactionQuery}
         );
         `
       );

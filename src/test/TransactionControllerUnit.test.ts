@@ -3,7 +3,8 @@ import { Request, Response } from 'express';
 import { createRequest, createResponse } from 'node-mocks-http';
 
 import { getTransactions, getTransactionById, createTransaction, bulkCreateTransactions } from '../controllers/TransactionController';
-import sampleTransactions from '../seeders/sampleTransactions';
+import { sampleTransactions } from '../seeders/sampleTransactions';
+import { Transaction } from '../models/Transaction';
 
 describe('Unit tests for TransactionController', () => {
   it('should return all transactions', async () => {
@@ -59,14 +60,14 @@ describe('Unit tests for TransactionController', () => {
   });
 
   it('should create a new transaction and classify it correctly', async () => {
-    let transaction: any = {
+    let transaction = {
       id: 'TRN00005',
       amount: (-200.00).toFixed(2).toString(),
       timestamp: new Date('2021-05-05').toISOString().slice(0, 19).replace('T', ' '),
       description: 'Test transaction 5',
       transactiontype: 'debit',
       accountnumber: 'ACCOUN0123456789'
-    }
+    } as Transaction;
     const req = createRequest<Request>({
       body: transaction
     });

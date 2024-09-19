@@ -3,18 +3,18 @@ import { Request, Response } from 'express';
 import { createRequest, createResponse } from 'node-mocks-http';
 
 import { getTransactions, getTransactionById, createTransaction } from '../controllers/TransactionController';
-import sampleTransactions from '../seeders/sampleTransactions';
+import { Transaction } from '../models/Transaction';
 
 describe('Integration tests for Transaction', () => {
   it('create a transaction, classify it correctly and return it when prompted', async () => {
-    let transaction: any = {
+    let transaction = {
       id: 'TRN00006',
       amount: (-200.00).toFixed(2).toString(),
       timestamp: new Date('2021-05-05').toISOString().slice(0, 19).replace('T', ' '),
       description: 'Test transaction 6',
       transactiontype: 'debit',
       accountnumber: 'ACCOUN0123456789'
-    }
+    } as Transaction;
     // Create a new transaction which will be classified by the API
     const req = createRequest<Request>();
     req.body = transaction;

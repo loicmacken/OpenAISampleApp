@@ -4,13 +4,15 @@ import { createRequest, createResponse } from 'node-mocks-http';
 import fs from 'fs';
 
 import { bulkCreateTransactions, getTransactions } from '../controllers/TransactionController'
+import { JSONResult } from 'csvtojson/v2/lineToJson';
+import { Transaction } from '../models/Transaction';
 
 export default {
   importFromCsv: async () => {
-    const csvFilePath = process.env.CSV_IMPORT_PATH as any;
+    const csvFilePath = process.env.CSV_IMPORT_PATH as string;
     try {
-      const rows = await csv().fromFile(csvFilePath)
-      const transactions = rows.map((row: any) => {
+      const rows = await csv().fromFile(csvFilePath);
+      const transactions = rows.map((row: JSONResult) => {
         return {
           id: row["Transaction ID"],
           amount: row["Amount"],
@@ -36,15 +38,15 @@ export default {
   },
 
   exportToCsv: async () => {
-    const csvFilePath = process.env.CSV_EXPORT_PATH as any;
+    const csvFilePath = process.env.CSV_EXPORT_PATH as string;
     try {
       const req = createRequest<Request>();
       const res = createResponse<Response>();
       await getTransactions(req, res, () => { });
-      const transactions = res._getJSONData() as any;
+      const transactions = res._getJSONData() as Array<Transaction>;
       const header_row = "Transaction ID,Amount,Timestamp,Description,Transaction Type,Account Number,Transaction Category\n";
       let csvString = header_row;
-      transactions.forEach((transaction: any) => {
+      transactions.forEach((transaction: Transaction) => {
         const row = [
           transaction.id,
           transaction.amount,

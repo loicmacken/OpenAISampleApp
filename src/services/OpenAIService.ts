@@ -1,14 +1,15 @@
 import OpenAI from 'openai';
 
-import TransactionCategory from '../models/TransactionCategory';
+import { TransactionCategory } from '../models/TransactionCategory';
 import validateTransaction from '../validators/TransactionValidator';
+import { Transaction } from '../models/Transaction';
 
-const openAIClassifySingleTransaction = async (transaction: any) => {
+const openAIClassifySingleTransaction = async (transaction: Transaction) => {
   const key = process.env.OPENAI_API_KEY;
   const client = new OpenAI({
     apiKey: key
   });
-  const openAIreq = {
+  const requestParams = {
     model: 'gpt-4o-mini',
     messages: [{
         "role": "system",
@@ -21,25 +22,25 @@ const openAIClassifySingleTransaction = async (transaction: any) => {
     logprobs: true,
     n: 1,
     top_logprobs: 10
-  };
-  const openAIResponse = await client.chat.completions.create(openAIreq as any) as any;
+  } as OpenAI.Chat.ChatCompletionCreateParams;
+  const chatCompletion = await client.chat.completions.create(requestParams) as OpenAI.Chat.ChatCompletion;
 
   // return transactions with category
-  transaction.transactioncategory = openAIResponse.choices[0].message.content;
+  transaction.transactioncategory = chatCompletion.choices[0].message.content;
 
   return transaction;
 }
 
-const openAIClassifyTransactions = async (transactions: Array<any>) => {
+const openAIClassifyTransactions = async (transactions: Array<Transaction>) => {
   // skip openAI API call in test and dev environment
   if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
-    transactions.map((transaction: any) => {
+    transactions.map((transaction: Transaction) => {
       transaction.transactioncategory = "Groceries";
     });
     return transactions;
   }
 
-  let classifiedTransactions: Array<any> = []
+  let classifiedTransactions: Array<Transaction> = []
   for (const transaction of transactions) {
     classifiedTransactions.push(await openAIClassifySingleTransaction(transaction));
   }
@@ -47,17 +48,17 @@ const openAIClassifyTransactions = async (transactions: Array<any>) => {
   return await classifiedTransactions;
 }
 
-export const classifyTransaction = async (transaction: any) => {
+export const classifyTransaction = async (transaction: Transaction) => {
   if (!validateTransaction(transaction)) {
     console.error("Invalid transaction data");
     return undefined;
   }
   
-  const [classifiedTransaction]: any =  await openAIClassifyTransactions([transaction]);
+  const [classifiedTransaction]: Array<Transaction> =  await openAIClassifyTransactions([transaction]);
   return classifiedTransaction;
 }
 
-export const bulkClassifyTransactions = async (transactions: Array<any>) => {
+export const bulkClassifyTransactions = async (transactions: Array<Transaction>) => {
   for (const transaction of transactions) {
     if (!validateTransaction(transaction)) {
       console.error("Invalid transaction data");

@@ -4,6 +4,8 @@ import asyncHandler from 'express-async-handler';
 import pool from '../models/index';
 import validateTransaction from '../validators/TransactionValidator';
 import { classifyTransaction, bulkClassifyTransactions } from '../services/OpenAIService';
+import { Transaction } from '../models/Transaction';
+import { QueryResult } from 'pg';
 
 export const getTransactions = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const query = `
@@ -66,7 +68,7 @@ export const createTransaction = asyncHandler(async (req: Request, res: Response
     `;
 
     const client = await pool.connect();
-    await client.query(query).then((result: any) => {
+    await client.query(query).then((result: QueryResult) => {
       res.status(201).json(result.rows[0]);
       client.release();
     });
@@ -83,7 +85,7 @@ export const bulkCreateTransactions = asyncHandler(async (req: Request, res: Res
     return;
   }
 
-  req.body.map((transaction: any) => {
+  req.body.map((transaction: Transaction) => {
     if (!validateTransaction(transaction)) {
       res.status(400).json({ error: "Invalid transaction data" });
       return;
@@ -98,7 +100,7 @@ export const bulkCreateTransactions = asyncHandler(async (req: Request, res: Res
     return;
   }
 
-  const values = classifiedTransactions.map((transaction: any) => {
+  const values = classifiedTransactions.map((transaction: Transaction) => {
     return `('${transaction.id}', ${transaction.amount}, '${transaction.timestamp}', '${transaction.description}', '${transaction.transactiontype}', '${transaction.accountnumber}', '${transaction.transactioncategory}')`;
   }).join(',');
 
@@ -109,7 +111,7 @@ export const bulkCreateTransactions = asyncHandler(async (req: Request, res: Res
   `;
 
   const client = await pool.connect();
-  await client.query(query).then((result: any) => {
+  await client.query(query).then((result: QueryResult) => {
     res.status(201).json(result.rows);
     client.release();
   });

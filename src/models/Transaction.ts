@@ -1,4 +1,14 @@
-export default `
+export interface Transaction {
+  id: string;
+  amount: string;
+  timestamp: string;
+  description: string | null;
+  transactiontype: string;
+  accountnumber: string;
+  transactioncategory: string | null;
+}
+
+export const TransactionQuery: string = `
   id VARCHAR(8) PRIMARY KEY NOT NULL UNIQUE CHECK (id ~ '^[a-zA-Z]{3}[0-9]{5}$'),
   amount DECIMAL(10, 2) NOT NULL,
   timestamp TIMESTAMP NOT NULL,

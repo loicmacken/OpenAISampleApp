@@ -1,6 +1,7 @@
 import jest from 'jest';
 import { classifyTransaction, bulkClassifyTransactions } from '../services/OpenAIService';
-import sampleTransactions from '../seeders/sampleTransactions';
+import { sampleTransactions } from '../seeders/sampleTransactions';
+import { Transaction } from '../models/Transaction';
 
 describe('Unit tests for OpenAIService', () => {
   it('should classify a single transaction', async () => {
@@ -14,12 +15,12 @@ describe('Unit tests for OpenAIService', () => {
   it('should throw an error if transaction data is invalid', async () => {
     const transaction = {
       id: 'xxxxx',
-      amount: -200.00,
+      amount: '-200.00',
       timestamp: 'xxxx-xx-xx',
       description: 'Test transaction 4',
       transactiontype: 'debit',
-      accountnumber: 'ACCOUN0123456789'
-    };
+      accountnumber: 'ACCOUN0123456789',
+    } as Transaction;
     const classifiedTransaction = await classifyTransaction(transaction);
     await expect(classifiedTransaction).not.toBeDefined();
   });
@@ -27,7 +28,7 @@ describe('Unit tests for OpenAIService', () => {
   it('should classify multiple transactions', async () => {
     const classifiedTransactions = await bulkClassifyTransactions(sampleTransactions);
     let expectedTransactions = JSON.parse(JSON.stringify(sampleTransactions));
-    expectedTransactions.map((transaction: any) => {
+    expectedTransactions.map((transaction: Transaction) => {
       transaction.transactioncategory = "Groceries";
     });
     await expect(classifiedTransactions).toEqual(expectedTransactions);
@@ -43,7 +44,7 @@ describe('Unit tests for OpenAIService', () => {
         transactiontype: 'debit',
         accountnumber: 'ACCOUN0123456789'
       }
-    ];
+    ] as Array<Transaction>;
     const classifiedTransactions = await bulkClassifyTransactions(transactions);
     await expect(classifiedTransactions.length).toBeLessThan(1);
   });

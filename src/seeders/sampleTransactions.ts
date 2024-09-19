@@ -1,4 +1,6 @@
-export default [
+import { Transaction } from '../models/Transaction';
+
+export const sampleTransactions: Array<Transaction> = [
   {
     id: 'TRN00001',
     amount: (100.00).toFixed(2).toString(),
