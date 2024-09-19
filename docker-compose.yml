@@ -4,13 +4,14 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_PASSWORD
-      - POSTGRES_DB=$DB_NAME_PROD
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
-      - "$DB_PORT:$DB_PORT"
+      - "$POSTGRES_PORT_LOCAL:$POSTGRES_PORT"
   web:
     build: .
     restart: unless-stopped
@@ -18,13 +19,13 @@ services:
     depends_on:
       - db
     ports:
-      - "$NODE_DOCKER_PORT:$NODE_DOCKER_PORT"
+      - "$NODE_PORT_LOCAL:$NODE_PORT"
     environment:
       - NODE_ENV=$NODE_ENV
-      - DB_HOST=$DB_HOST_DOCKER
-      - DB_USER=$DB_USER
-      - DB_PASSWORD=$DB_PASSWORD
-      - DB_NAME=$DB_NAME_PROD
-      - DB_PORT=$DB_PORT
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_PORT=$POSTGRES_PORT
     stdin_open: true
     tty: true
