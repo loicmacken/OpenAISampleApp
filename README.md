@@ -1,4 +1,5 @@
 # OpenAISampleApp
+
 Classify banking transactions into 10 predefined categories.
 
 ## Usage
@@ -14,24 +15,13 @@ Then copy `.env.example` and rename it to `.env`. Here you should fill in the `O
 Then run the docker compose command to run the container:
 
 ```
-  docker-compose -f docker-compose.yml up
+  docker compose up
 ```
 
 Now you can access the api from the following url:
 
 ```
-  localhost:8080
-```
-
-### (Optional) Populate database from CSV file
-
-You can add transactions to the database to be classified in bulk by providing a csv file containing the transactions and setting the path to it in the variable `CSV_IMPORT_PATH` in `.env`. Then you can import them using the command:
-```
-  npm run db:importcsv
-```
-Similarly, you can export transactions from a csv file by setting the `CSV_EXPORT_PATH` and then running:
-```
-  npm run db:exportcsv
+  localhost:6868
 ```
 
 ## API Documentation
@@ -78,6 +68,21 @@ The API contains the following endpoints:
 - GET `/transactions/:id`: returns a single transaction. Response body is the same but contains only one transaction object. Example request:
 ```
   curl -XGET 'localhost:6868/transactions'
+```
+
+### Import and export CSV data
+
+You can add transactions to the database to be classified in bulk by providing a csv file containing the transactions and setting the path to it in the variable `CSV_IMPORT_PATH` in `.env`. Then you can import them using the command:
+```
+  docker exec <container-id> npm run db:importcsv
+```
+Where `<container-id>` is the `id` of the created `web-1` container. You can find it by running `docker ps -a`. 
+The CSV header row is expected to be in the following format:
+`Transaction ID,Amount,Timestamp,Description,Transaction Type,Account Number,Transaction Category`.
+
+Similarly, you can export transactions from a csv file by setting the `CSV_EXPORT_PATH` and then running:
+```
+  docker exec <container-id> npm run db:exportcsv
 ```
 
 ## Trade-offs:
