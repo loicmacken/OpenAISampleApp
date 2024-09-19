@@ -4,7 +4,7 @@
   "description": "Classify banking transactions into 10 predefined categories.",
   "main": "src/server.ts",
   "scripts": {
-    "test": "jest",
+    "test": "npm run db:migrate && npm run db:seeds && jest",
     "dev": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
     "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
     "db:migrate": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
