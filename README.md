@@ -27,11 +27,13 @@ Now you can access the api from the following url:
 
 You can add transactions to the database to be classified in bulk by providing a csv file containing the transactions and setting the path to it in the variable `CSV_IMPORT_PATH` in `.env`. Then you can import them using the command:
 ```
-  npm run db:importcsv
+  docker exec <container-id> npm run db:importcsv
 ```
+Where `<container-id>` is the `id` of the created `web-1` container. You can find it by running `docker ps -a`. 
+
 Similarly, you can export transactions from a csv file by setting the `CSV_EXPORT_PATH` and then running:
 ```
-  npm run db:exportcsv
+  docker exec <container-d> npm run db:exportcsv
 ```
 
 ## API Documentation
