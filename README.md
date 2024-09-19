@@ -82,7 +82,7 @@ The CSV header row is expected to be in the following format:
 
 Similarly, you can export transactions from a csv file by setting the `CSV_EXPORT_PATH` and then running:
 ```
-  docker exec <container-d> npm run db:exportcsv
+  docker exec <container-id> npm run db:exportcsv
 ```
 
 ## Trade-offs:
