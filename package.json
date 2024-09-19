@@ -4,13 +4,13 @@
   "description": "Classify banking transactions into 10 predefined categories.",
   "main": "src/server.ts",
   "scripts": {
-    "test": "npm run db:seeds && jest",
-    "dev": "npm run db:migrate && node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
-    "start": "npm run db:migrate && node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
+    "test": "jest",
+    "dev": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
+    "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
     "db:migrate": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.up()\"",
     "db:reset": "npx tsx -e \"import migration from './src/migrations/TransactionMigration'; migration.down()\" && npm run db:migrate",
-    "db:seeds": "npm run db:migrate && npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
-    "db:reseed": "npm run db:reset && npm run db:seeds",
+    "db:seeds": "npx tsx -e \"import seed from './src/seeders/TransactionSeeds'; seed.up()\"",
+    "db:reseed": "npm run db:reset && npm run db:migrate && npm run db:seeds",
     "db:importcsv": "npx tsx -e \"import csv from './src/scripts/csvConnection'; csv.importFromCsv()\"",
     "db:exportcsv": "npx tsx -e \"import csv from './src/scripts/csvConnection'; csv.exportToCsv()\""
   },
