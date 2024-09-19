@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE $NODE_PORT
 
-CMD ["sh", "-c", "npm start"]
+CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"production\" ]; then npm run start; else if [ \"$NODE_ENV\" = \"development\" ]; then npm run dev; else npm run test; fi; fi"]

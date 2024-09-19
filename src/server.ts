@@ -7,6 +7,7 @@ dotenv.config();
 import router from './routes/routes';
 import pool from './models/index';
 import TransactionMigration from './migrations/TransactionMigration';
+import TransactionSeeds from './seeders/TransactionSeeds';
 
 const app = express();
 const port = process.env.NODE_PORT || 8080;
@@ -22,6 +23,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 pool.connect().then(() => {
   TransactionMigration.up().then(() => {
-    app.listen(port, () => console.log(`Server running on port ${port}`));
+    if (process.env.NODE_ENV === 'test') {
+      TransactionSeeds.up().then(() => {
+        app.listen(port, () => console.log(`Server running on port ${port}`));
+      });
+    } else {
+      app.listen(port, () => console.log(`Server running on port ${port}`));
+    }
   });
 });
