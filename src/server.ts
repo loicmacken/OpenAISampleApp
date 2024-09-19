@@ -5,9 +5,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import router from './routes/routes';
+import pool from './models/index';
+import TransactionMigration from './migrations/TransactionMigration';
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.NODE_PORT || 8080;
 
 app.use(express.json());
 
@@ -18,4 +20,8 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send('Internal Server Error');
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+pool.connect().then(() => {
+  TransactionMigration.up().then(() => {
+    app.listen(port, () => console.log(`Server running on port ${port}`));
+  });
+});
