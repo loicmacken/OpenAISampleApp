@@ -39,19 +39,20 @@ Similarly, you can export transactions from a csv file by setting the `CSV_EXPOR
 The API contains the following endpoints:
 - POST `/transactions`: submit a new transaction. Example request:
 ```
-  curl --header "Content-Type: application/json" \
-  --request POST \
-  --data '{
-      "id": "TRN00004",
+  curl -XPOST -H "Content-type: application/json" -d '{
+      "id": "TRN10009",
       "amount": "-200.00",
       "timestamp": "2021-05-05 00:00:00",
-      "description": "Test transaction 4",
+      "description": "Rent Payment",
       "transactiontype": "debit",
       "accountnumber": "ACCOUN0123456789"
-    }' \
-  http://localhost:8080/transactions
+  }' 'localhost:6868/transactions'
 ```
-- GET `/transactions`: returns all transactions. Example response body:
+- GET `/transactions`: returns all transactions. Example request:
+```
+  curl -XGET 'localhost:6868/transactions'
+```
+- Example response body:
 ```
   [
     {
@@ -74,7 +75,10 @@ The API contains the following endpoints:
     }
   ]
 ```
-- GET `/transactions/:id`: returns a single transaction. Response body is the same but contains only one transaction object.
+- GET `/transactions/:id`: returns a single transaction. Response body is the same but contains only one transaction object. Example request:
+```
+  curl -XGET 'localhost:6868/transactions'
+```
 
 ## Trade-offs:
 
