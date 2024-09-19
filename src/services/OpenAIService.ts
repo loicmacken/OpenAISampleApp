@@ -42,7 +42,11 @@ const openAIClassifyTransactions = async (transactions: Array<Transaction>) => {
 
   let classifiedTransactions: Array<Transaction> = []
   for (const transaction of transactions) {
-    classifiedTransactions.push(await openAIClassifySingleTransaction(transaction));
+    if (transaction.transactioncategory === null || transaction.transactioncategory === undefined) {
+      classifiedTransactions.push(await openAIClassifySingleTransaction(transaction));
+    } else {
+      classifiedTransactions.push(transaction);
+    }
   }
 
   return await classifiedTransactions;
