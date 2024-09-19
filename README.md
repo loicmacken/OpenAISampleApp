@@ -14,13 +14,13 @@ Then copy `.env.example` and rename it to `.env`. Here you should fill in the `O
 Then run the docker compose command to run the container:
 
 ```
-  docker-compose -f docker-compose.yml up
+  docker compose up
 ```
 
 Now you can access the api from the following url:
 
 ```
-  localhost:8080
+  localhost:6868
 ```
 
 ### (Optional) Populate database from CSV file
